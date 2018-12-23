@@ -19,7 +19,7 @@ predicate
 
 constraint
    forall (i in 1..n) (
-       selected_positions[i] > 0 -> q[i] = selected_positions[i]
+       selected_positions[i] > 0 -> (q[i] = selected_positions[i])
    );
 
 constraint

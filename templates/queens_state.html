@@ -42,11 +42,11 @@
 
 {% if not is_valid  %}
     <p>There exists no solution for your selection of queens.</p>
-    <p><button onclick="window.location.href='/nqueens-game'">Try again!</button>
+    <p><button onclick="window.location.href='/nqueens-try-again'">Try again!</button>
     </p>
 {% elif has_won %}
     <p>Well done, you have solved the puzzle! </p>
-    <p><button onclick="window.location.href='/nqueens-game'">Try again!</button>
+    <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
     </p>
 {% else %}
 {% endif %}

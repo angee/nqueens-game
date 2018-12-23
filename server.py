@@ -11,30 +11,49 @@ socketio = SocketIO(app)
 
 # positions of the queens
 column_positions = []
-# set to True if the positions have been initialised
-initialised_positions = False
+# initial chessboard size
+board_size = 5
 
 
 @app.route('/nqueens-game')
-def queensStart():
+def queens_start():
     return render_template('start.html')
 
 
 @app.route('/nqueens-game', methods=['POST'])
-def set_chessboard_size():
+def play():
     text = request.form['N']
     processed_input = ''.join(e for e in text if e.isalnum())
+    global board_size
     board_size = int(processed_input)
     # TODO: introduce proper error handling
     if board_size > 100:
         board_size = 100
+    return play(board_size)
+
+
+@app.route('/nqueens-another-game')
+def play_again():
+    global board_size
+    board_size += 1
+    return play(board_size)
+
+
+@app.route('/nqueens-try-again')
+def try_again():
+    global board_size
+    return play(board_size)
+
+
+def play(chess_board_size: int):
     global column_positions
-    column_positions[:board_size] = [0] * board_size  # initialise each position with zero
+    column_positions = []
+    column_positions[:chess_board_size] = [0] * chess_board_size  # initialise each position with zero
     arguments = {
         'queens_positions': column_positions,
+        'is_valid': True,
+        'has_won': False
     }
-    global initialised_positions
-    initialised_positions = True
     return render_template('queens_state.html', **arguments)
 
 
