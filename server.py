@@ -51,6 +51,8 @@ def select_position_of_queen():
     set_position(column, row)
     arguments = {
         'queens_positions': column_positions,
+        'is_valid': is_solution_valid(size=len(column_positions)),
+        'has_won' : has_won()
     }
     return render_template('queens_state.html', **arguments)
 
@@ -63,38 +65,50 @@ def set_position(column: int, row: int):
     return
 
 
-@app.route('/solve', methods=['POST'])
-def start_solving_queens():
-    text = request.form['N']
-    processed_input = ''.join(e for e in text if e.isalnum())
-    N = int(processed_input)
-    # TODO: introduce proper error handling
-    if N > 100:
-        N = 100
-    column_positions[:N] = [0] * N
-    return solve_queens(N)
-
-
-def solve_queens(N):
+def is_solution_valid(size: int) -> bool:
     path = os.path.dirname(os.path.realpath(__file__)) + "/minizinc/"
     problem_file_path = path + "queens.mzn"
     print(problem_file_path)
+    create_data_file(size)
     os.environ["FLATZINC_CMD"] = "fzn-gecode"  # choose gecode as FlatZinc solver
     # make sure that MZN_STD_LIB_DIR is set!
-    with subprocess.Popen(["minizinc", "--solver", "gecode", problem_file_path, "-D n=" + str(N) + ";"],
+    with subprocess.Popen(["minizinc", "--solver", "gecode",  problem_file_path, "--data", path + "data.dzn"],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1,
                           universal_newlines=True) as p:
-
         lines = []
         for line in p.stdout:
             lines.append(line)
+    is_valid = True
+    for line in lines:
+        if "UNSATISFIABLE" in line:
+            is_valid = False
+    print("Solution from solving with settings: ")
+    print_list(lines)
+    return is_valid
 
-    queen_positions = []
-    for i in range(0, len(lines) - 1):  # ignore the last line which is just a bar
-        trimmed_line = ''.join(e for e in lines[i] if e.isalnum())  # remove everything that is not a number
-        queen_positions.append(int(trimmed_line))
 
-    arguments = {
-        'queens_positions': queen_positions,
-    }
-    return render_template('queens_solution.html', **arguments)
+def has_won():
+    global column_positions
+    all_positions_set = True
+    for position in column_positions:
+        if position == 0:
+            all_positions_set = False
+            break
+    return all_positions_set
+
+
+def create_data_file(size: int):
+    path = os.path.dirname(os.path.realpath(__file__)) + "/minizinc/"
+    data_file_name = path + "data.dzn"
+    dzn_file = open(data_file_name, 'w')
+    dzn_file.write("n = " + str(size) + ";\n")
+    dzn_file.write("\n\nselected_positions = [\n")
+    for position in column_positions:
+        dzn_file.write(str(position) + ", ")
+    dzn_file.write("\n];\n")
+    dzn_file.close()
+    return
+
+
+def print_list(list_to_print):
+    print('[%s]' % ', '.join(map(str, list_to_print)))
