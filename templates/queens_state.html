@@ -14,24 +14,66 @@
     body {
         font-family: "Arial";
     }
+    .td {
+        border: none;
+        color: white;
+        padding: 15px 15px;
+        text-align: center;
+        text-decoration: none;
+        /*display: inline-block;*/
+        font-size: 1px;
+        margin: 2px 2px;
+        cursor: pointer;
+    }
+    .td_black {
+        background-color: #555555; /* blackish */
+    }
+    .td_light {
+        background-color: #eeeeee; /* yellowish */
+    }
+    .button {
+        border: none;
+        padding: 15px 15px;
+        text-align: center;
+        text-decoration: none;
+        /*display: inline-block;*/
+        font-size: 1px;
+        margin: 2px 2px;
+        cursor: pointer;
+    }
+    .button_black{
+        background-color: #555555; /* blackish */
+    }
+    .button_light{
+        background-color: #eeeeee; /* yellowish */
+    }
 </style>
 <body>
+
+<p><b>You are solving the {{ queens_positions|length }}-queens puzzle.</b></p>
 
 <table>
     {% for i in range(queens_positions|length) %}
     <tr>
         {% for j in range(queens_positions|length) %}
         {% if j + 1 == queens_positions[i] and is_valid %}
-            <td bgcolor="#2d5986"></td>
-        {% elif j + 1 == queens_positions[i] and not is_valid %}
             <td bgcolor="#2dee86"></td>
+        {% elif j + 1 == queens_positions[i] and not is_valid %}
+            <td bgcolor="#f12e86"></td>
         {% else %}
-        <td bgcolor="#e6f2ff">
-        <form action="/select" method="post" >
-        <input name="button" type ="submit" value="{{ i }}_{{ j }}" />
-        </form>
-
-        </td>
+           {% if (j % 2 == 0 and i % 2 == 0) or (j % 2 == 1 and i % 2 == 1) %}
+               <td class="td td_black">
+               <form action="/select" method="post" >
+             <input class ="button button_black" name="button" type ="submit" value="{{ i }}_{{ j }}" />
+             </form>
+             </td>
+           {% else %}
+             <td class = "td td_light">
+               <form action="/select" method="post" >
+             <input class="button button_light" name="button" type ="submit" value="{{ i }}_{{ j }}" />
+             </form>
+             </td>
+           {% endif %}
         {% endif %}
         {% endfor %}
     </tr>
@@ -49,6 +91,7 @@
     <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
     </p>
 {% else %}
+    <p>Click on a field of the chess board to place your queen.</p>
 {% endif %}
 </body>
 </html>
