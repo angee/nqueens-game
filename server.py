@@ -9,6 +9,11 @@ app = Flask(__name__)
 # sockets
 socketio = SocketIO(app)
 
+# positions of the queens
+column_positions = []
+# set to True if the positions have been initialised
+initialised_positions = False
+
 
 @app.route('/nqueens-game')
 def queensStart():
@@ -16,17 +21,61 @@ def queensStart():
 
 
 @app.route('/nqueens-game', methods=['POST'])
-def queensStartWithInput():
+def set_chessboard_size():
+    text = request.form['N']
+    processed_input = ''.join(e for e in text if e.isalnum())
+    board_size = int(processed_input)
+    # TODO: introduce proper error handling
+    if board_size > 100:
+        board_size = 100
+    global column_positions
+    column_positions[:board_size] = [0] * board_size  # initialise each position with zero
+    arguments = {
+        'queens_positions': column_positions,
+    }
+    global initialised_positions
+    initialised_positions = True
+    return render_template('queens_state.html', **arguments)
+
+
+@app.route('/select', methods=['POST'])
+def select_position_of_queen():
+    text = request.form['button']
+    print("text = " + text)
+    position = text.split("_")
+    i = ''.join(e for e in position[0] if e.isalnum())
+    j = ''.join(e for e in position[1] if e.isalnum())
+    row = int(i)
+    column = int(j) + 1  # account for array offset
+    # set the position of the selected queen
+    set_position(column, row)
+    arguments = {
+        'queens_positions': column_positions,
+    }
+    return render_template('queens_state.html', **arguments)
+
+
+def set_position(column: int, row: int):
+    global column_positions
+    print("setting row = " + str(row) + ", column = " + str(column))
+    column_positions[row] = column
+    print('[%s]' % ', '.join(map(str, column_positions)))
+    return
+
+
+@app.route('/solve', methods=['POST'])
+def start_solving_queens():
     text = request.form['N']
     processed_input = ''.join(e for e in text if e.isalnum())
     N = int(processed_input)
     # TODO: introduce proper error handling
     if N > 100:
         N = 100
-    return solveQueens(N)
+    column_positions[:N] = [0] * N
+    return solve_queens(N)
 
 
-def solveQueens(N):
+def solve_queens(N):
     path = os.path.dirname(os.path.realpath(__file__)) + "/minizinc/"
     problem_file_path = path + "queens.mzn"
     print(problem_file_path)
