@@ -7,11 +7,11 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 
 # sockets
-socketio = SocketIO(app)
+socket_io = SocketIO(app)
 
-# positions of the queens
+#  Holds the column positions for the queen in the i-th row on the chess board. Set to 0 if not yet set.
 column_positions = []
-# initial chessboard size
+# the dimension of the chessboard
 board_size = 5
 
 
@@ -26,7 +26,7 @@ def play():
     processed_input = ''.join(e for e in text if e.isalnum())
     global board_size
     board_size = int(processed_input)
-    # TODO: introduce proper error handling
+    # Do not allow board sizes larger than 100
     if board_size > 100:
         board_size = 100
     return play(board_size)
@@ -60,64 +60,48 @@ def play(chess_board_size: int):
 @app.route('/select', methods=['POST'])
 def select_position_of_queen():
     text = request.form['button']
-    print("text = " + text)
     position = text.split("_")
     i = ''.join(e for e in position[0] if e.isalnum())
     j = ''.join(e for e in position[1] if e.isalnum())
     row = int(i)
     column = int(j) + 1  # account for array offset
-    # set the position of the selected queen
-    set_position(column, row)
+    set_position_of_new_queen(column, row)
     arguments = {
         'queens_positions': column_positions,
         'is_valid': is_solution_valid(size=len(column_positions)),
-        'has_won' : has_won()
+        'has_won': has_won()
     }
     return render_template('queens_state.html', **arguments)
 
 
-def set_position(column: int, row: int):
+def set_position_of_new_queen(column: int, row: int):
     global column_positions
-    print("setting row = " + str(row) + ", column = " + str(column))
     column_positions[row] = column
-    print('[%s]' % ', '.join(map(str, column_positions)))
     return
 
 
 def is_solution_valid(size: int) -> bool:
     path = os.path.dirname(os.path.realpath(__file__)) + "/minizinc/"
-    problem_file_path = path + "queens.mzn"
-    print(problem_file_path)
-    create_data_file(size)
-    os.environ["FLATZINC_CMD"] = "fzn-gecode"  # choose gecode as FlatZinc solver
+    create_data_file(size, path)
     # make sure that MZN_STD_LIB_DIR is set!
-    with subprocess.Popen(["minizinc", "--solver", "gecode",  problem_file_path, "--data", path + "data.dzn"],
+    with subprocess.Popen(["minizinc", "--solver", "gecode", path + "queens.mzn", "--data", path + "data.dzn"],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1,
                           universal_newlines=True) as p:
-        lines = []
         for line in p.stdout:
-            lines.append(line)
-    is_valid = True
-    for line in lines:
-        if "UNSATISFIABLE" in line:
-            is_valid = False
-    print("Solution from solving with settings: ")
-    print_list(lines)
-    return is_valid
+            if "UNSATISFIABLE" in line:
+                return False
+    return True
 
 
-def has_won():
+def has_won() -> bool:
     global column_positions
-    all_positions_set = True
     for position in column_positions:
         if position == 0:
-            all_positions_set = False
-            break
-    return all_positions_set
+            return False
+    return True
 
 
-def create_data_file(size: int):
-    path = os.path.dirname(os.path.realpath(__file__)) + "/minizinc/"
+def create_data_file(size: int, path: str):
     data_file_name = path + "data.dzn"
     dzn_file = open(data_file_name, 'w')
     dzn_file.write("n = " + str(size) + ";\n")
@@ -127,7 +111,3 @@ def create_data_file(size: int):
     dzn_file.write("\n];\n")
     dzn_file.close()
     return
-
-
-def print_list(list_to_print):
-    print('[%s]' % ', '.join(map(str, list_to_print)))
