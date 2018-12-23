@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>{{ queens_positions|length }}-Queens Problem</title>
+</head>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-spacing: 10px;
+    }
+    td {
+        padding: 10px;
+    }
+    body {
+        font-family: "Arial";
+    }
+</style>
+<body>
+
+<p>Solution for the <b>{{ queens_positions|length }}-Queens</b> problem:</p>
+
+
+<table>
+    {% for i in range(queens_positions|length) %}
+    <tr>
+        {% for j in range(queens_positions|length) %}
+        {% if j == queens_positions[i] - 1 %}
+        <td bgcolor="#2d5986"></td>
+        {% else %}
+        <td bgcolor="#e6f2ff"></td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+
+<p><button onclick="window.location.href='/nqueens-game'">Solve More</button>
+</p>
+
+</body>
+</html>
