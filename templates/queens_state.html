@@ -83,7 +83,8 @@
 
 
 {% if not is_valid  %}
-    <p>There exists no solution for your selection of queens.</p>
+    <p>There exists no solution for your selection of queens (checked by
+        CP solver <a href="http://gecode.org">Gecode</a>).</p>
     <p><button onclick="window.location.href='/nqueens-try-again'">Try again!</button>
     </p>
 {% elif has_won %}

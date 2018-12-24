@@ -19,7 +19,8 @@ This code was inspired by the MiniZinc web servers from
 
 The application requires Python 3.6 and an installation of [MiniZinc 2.2.1](http://minizinc.org) 
 (or newer). It is recommended to setup a virtual environment for Python. 
-Install all required Python libraries listed in `requirements.txt` using `pip install <package-name>`.
+Install all required Python libraries listed in `requirements.txt` using the command 
+`pip install -r requirements.txt`.
 
 Go into your terminal and set the `$FLASK_APP` enviroment variable, for instance, under bash:
 
