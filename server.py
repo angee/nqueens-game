@@ -1,7 +1,9 @@
 import os
+
 from eventlet.green import subprocess
-from flask import Flask, json, Response, request, render_template
-from flask_socketio import SocketIO, emit
+from flask import Flask, request, render_template
+from flask_socketio import SocketIO
+import random
 
 # setup
 app = Flask(__name__)
@@ -13,6 +15,10 @@ socket_io = SocketIO(app)
 column_positions = []
 # the dimension of the chessboard
 board_size = 5
+# the number of different images to display when the player has won
+number_of_winning_images = 5
+# the number of the image to display when the player has won
+winning_image_number = 1
 
 
 @app.route('/riccardo-xmas')
@@ -72,7 +78,8 @@ def select_position_of_queen():
     arguments = {
         'queens_positions': column_positions,
         'is_valid': is_solution_valid(size=len(column_positions)),
-        'has_won': has_won()
+        'has_won': has_won(),
+        'winning_image_number' : pick_random_winning_image(),
     }
     return render_template('queens_state.html', **arguments)
 
@@ -114,3 +121,10 @@ def create_data_file(size: int, path: str):
     dzn_file.write("\n];\n")
     dzn_file.close()
     return
+
+
+def pick_random_winning_image() -> int:
+    global winning_image_number
+    global number_of_winning_images
+    winning_image_number = random.randint(1,number_of_winning_images+1)
+    return winning_image_number

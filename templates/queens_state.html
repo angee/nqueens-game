@@ -110,13 +110,28 @@
 {% elif has_won %}
     <p>Well done, you have solved the puzzle!<br>
     <!-- show cute christmas puppies "as reward" -->
-    <img width="350" src="https://us.123rf.com/450wm/tobkatrina/tobkatrina1609/tobkatrina160900041/64518706-singing-christmas-puppies-wearing-santa-hats-on-white.jpg?ver=6">
+        {% if winning_image_number == 1 %}
+            <!-- dog dancing in snow -->
+            <img src="https://i.chzbgr.com/full/7964483072/h209A7D26/">
+        {% elif winning_image_number == 2 %}
+            <!--  dog playing with christmas tree ball -->
+            <img width="300" src="https://media.giphy.com/media/25OC55J5R6jCnPIZ5N/giphy.gif">
+        {% elif winning_image_number == 3 %}
+            <!-- dogs on treadmill with xmas hats -->
+            <img width="300" src="https://media.giphy.com/media/cc3FdmGSrr35C/giphy.gif">
+        {% elif winning_image_number == 4 %}
+            <!-- dogs coming out of christmas presents -->
+            <img src="https://media.giphy.com/media/MFOEBssUaigb6/giphy.gif">
+        {%  else %}
+            <!-- geeky dogs under christmas tree -->
+            <img src="https://media.giphy.com/media/3rjZ6ABj8BUNa/giphy.gif">
+        {% endif %}
     </p>
     <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
     </p>
 {% else %}
     <p>Click on a field of the chess board to place your queen.</p>
-    {% endif %}
+ {% endif %}
 
      <br>
      <p><button onclick="window.location.href='/riccardo-xmas'">Go back to start page</button>
