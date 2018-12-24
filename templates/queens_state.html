@@ -54,6 +54,11 @@
     .button_light{
         background-color: #eeeeee; /* yellowish */
     }
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 <body>
 
@@ -66,9 +71,15 @@
     <tr>
         {% for j in range(queens_positions|length) %}
         {% if j + 1 == queens_positions[i] and is_valid %}
-            <td bgcolor="#2dee86"></td>
+            <td bgcolor="#2dee86">
+            <!-- display the queen -->
+            <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
+            </td>
         {% elif j + 1 == queens_positions[i] and not is_valid %}
-            <td bgcolor="#f12e86"></td>
+            <td bgcolor="#f12e86">
+            <!-- display the queen -->
+            <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
+            </td>
         {% else %}
            {% if (j % 2 == 0 and i % 2 == 0) or (j % 2 == 1 and i % 2 == 1) %}
                <td class="td td_black">
@@ -97,7 +108,10 @@
     <p><button onclick="window.location.href='/nqueens-try-again'">Try again!</button>
     </p>
 {% elif has_won %}
-    <p>Well done, you have solved the puzzle! </p>
+    <p>Well done, you have solved the puzzle!<br>
+    <!-- show cute christmas puppies "as reward" -->
+    <img width="350" src="https://us.123rf.com/450wm/tobkatrina/tobkatrina1609/tobkatrina160900041/64518706-singing-christmas-puppies-wearing-santa-hats-on-white.jpg?ver=6">
+    </p>
     <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
     </p>
 {% else %}
