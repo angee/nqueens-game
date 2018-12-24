@@ -4,19 +4,50 @@
 </head>
 <style>
     body {
-        font-family: "Arial";
+      font-family: "Arial";
+      background-image: url("http://clipart-library.com/download/clipart/1601117.htm");
+      background-repeat: no-repeat;
+    }
+    div.text {
+      width: 40%;
+      margin-left: 200px;
+      margin-top: 100px;
+    }
+    p.text {
+       margin-left: 30px;
     }
 </style>
 <body>
-<h1>N-queens Game</h1>
+  <br>
+  <br>
+  <br>
 
-<p width="300">Can you place N queens on an N x N chessboard so that no two queens attack each other?<br>
+  <div class="text">
+    <h1>Merry Christmas, Riccardo!</h1>
+    
+    <p>I know you as someone very brainy who loves a puzzle. This is why I programmed a little "puzzle-game" as a present for you -
+      <b>the N-queens game!</b></p>
+    
+    <p>The game is based on the <a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">8-Queens Problem</a> and
+      the challenge is to place N queens on an N x N chessboard so that no two queens attack each other.
+      Note that every time you place a queen on the chessboard, a solver checks if there is a solution for the current placement,
+      that's why there is a minimal delay after each step.
+      Sorry for the simple graphics, that's not my strength ;-)</p>
+
+  
+    <p>I will keep this game online for a couple of days. If you would like to play the game locally on your machine, then write a
+      message in the secret santa channel and I'll share the code with you including setup instructions (it's mainly written in
+      Python using Flask).</p>
+    <br>
+    
+    <form method="POST">
+      <b>Start playing:</b> choose your chessboard size (N): <input name="N" maxlength="3" size="3" type ="number" style="width: 50px;">
+      <br>(<i>hint: 5 is a good start</i>)
+       <p><input type="submit" value="Play!"></p>
+    </form>
+  </div>
 
 
-<form method="POST">
-    Choose your chessboard size (N): <input name="N" maxlength="3" size="3" type ="number" style="width: 50px;">
-    <p><input type="submit" value="Play!"></p>
-</form>
 </body>
 
 

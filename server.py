@@ -15,20 +15,23 @@ column_positions = []
 board_size = 5
 
 
-@app.route('/nqueens-game')
+@app.route('/riccardo-xmas')
 def queens_start():
     return render_template('start.html')
 
 
-@app.route('/nqueens-game', methods=['POST'])
+@app.route('/riccardo-xmas', methods=['POST'])
 def play():
-    text = request.form['N']
-    processed_input = ''.join(e for e in text if e.isalnum())
     global board_size
-    board_size = int(processed_input)
-    # Do not allow board sizes larger than 100
-    if board_size > 100:
-        board_size = 100
+    text = request.form['N']
+    if text == '':
+        board_size = 5
+    else:
+        processed_input = ''.join(e for e in text if e.isalnum())
+        board_size = int(processed_input)
+    # Do not allow board sizes larger than 55
+    if board_size > 55:
+        board_size = 55
     return play(board_size)
 
 

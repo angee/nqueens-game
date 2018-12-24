@@ -11,8 +11,15 @@
     td {
         padding: 10px;
     }
+    div.text {
+      width: 40%;
+      margin-left: 250px;
+      margin-top: 100px;
+    }
     body {
-        font-family: "Arial";
+      font-family: "Arial";
+      background-image: url("http://clipart-library.com/download/clipart/1601117.htm");
+      background-repeat: no-repeat;
     }
     .td {
         border: none;
@@ -50,6 +57,8 @@
 </style>
 <body>
 
+  <div class="text">
+    
 <p><b>You are solving the {{ queens_positions|length }}-queens puzzle.</b></p>
 
 <table>
@@ -93,6 +102,11 @@
     </p>
 {% else %}
     <p>Click on a field of the chess board to place your queen.</p>
-{% endif %}
+    {% endif %}
+
+     <br>
+     <p><button onclick="window.location.href='/riccardo-xmas'">Go back to start page</button>
+    </p>
+    </div>
 </body>
 </html>
