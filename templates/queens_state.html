@@ -1,3 +1,18 @@
+<!-- HTML page that displays the chessboard during all steps of the game
+
+It uses the following input parameters through Flask:
+
+1. queens_positions: an integer array of length N (size of chess board), that holds the column position of the queen
+                     on row i. In other words, queens_position[2] = 3 means that the queen in row 2 is placed on
+                     column 3. This is possible since there must be a queen in every row. If the queen in row i has
+                     not been yet placed, then its value is set to zero, for instance, queens_position[3] = 0 means
+                     that the queen in row 3 has not yet been placed anywhere.
+2. is_selection_valid: a Boolean value that is set to true if there exists a valid solution for the current selection of
+                       queens (i.e. the state of queens_positions), and false otherwise.
+3. all_queens_selected: a Boolean value that is set to True, if all N queens have been placed, otherwise False.
+4. winning_image_number: an integer that is represents the number of the winning image to display in case the player
+                         has won the game.
+-->
 <html>
 <head>
     <title>{{ queens_positions|length }}-Queens Game</title>
@@ -27,32 +42,30 @@
         padding: 15px 15px;
         text-align: center;
         text-decoration: none;
-        /*display: inline-block;*/
         font-size: 1px;
         margin: 2px 2px;
         cursor: pointer;
     }
     .td_black {
-        background-color: #555555; /* blackish */
+        background-color: #555555; /* blackish --> dark fields on the chess board */
     }
     .td_light {
-        background-color: #eeeeee; /* yellowish */
+        background-color: #eeeeee; /* yellowish --> light fields on the chess board */
     }
     .button {
         border: none;
         padding: 15px 15px;
         text-align: center;
         text-decoration: none;
-        /*display: inline-block;*/
         font-size: 1px;
         margin: 2px 2px;
         cursor: pointer;
     }
     .button_black{
-        background-color: #555555; /* blackish */
+        background-color: #555555; /* blackish --> dark fields on the chess board */
     }
     .button_light{
-        background-color: #eeeeee; /* yellowish */
+        background-color: #eeeeee; /* yellowish --> light fields on the chess board */
     }
     .center {
         display: block;
@@ -62,39 +75,42 @@
 </style>
 <body>
 
-  <div class="text">
+<div class="text">
     
 <p><b>You are solving the {{ queens_positions|length }}-queens puzzle.</b></p>
 
 <table>
     {% for i in range(queens_positions|length) %}
     <tr>
+        <!-- iterating over all fields (i,j) of the chess board -->
         {% for j in range(queens_positions|length) %}
-        {% if j + 1 == queens_positions[i] and is_valid %}
-            <td bgcolor="#2dee86">
-            <!-- display the queen -->
-            <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
+            <!-- if the field has been selected, and the selection is valid, display queen with green background -->
+            {% if j + 1 == queens_positions[i] and is_selection_valid %}
+              <td bgcolor="#2dee86"> <!-- green -->
+                <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
+              </td>
+            <!-- if the field has been selected, and the selection is invalid, display queen with red background -->
+            {% elif j + 1 == queens_positions[i] and not is_selection_valid %}
+                <td bgcolor="#f12e86"> <!-- red -->
+                <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
             </td>
-        {% elif j + 1 == queens_positions[i] and not is_valid %}
-            <td bgcolor="#f12e86">
-            <!-- display the queen -->
-            <img class ="center" width="35" src="https://www.clipartmax.com/png/middle/279-2796604_queen-chess-piece-black-shape-comments-queen-chess-piece-clipart.png" >
-            </td>
-        {% else %}
-           {% if (j % 2 == 0 and i % 2 == 0) or (j % 2 == 1 and i % 2 == 1) %}
-               <td class="td td_black">
-               <form action="/select" method="post" >
-             <input class ="button button_black" name="button" type ="submit" value="{{ i }}_{{ j }}" />
-             </form>
-             </td>
-           {% else %}
-             <td class = "td td_light">
-               <form action="/select" method="post" >
-             <input class="button button_light" name="button" type ="submit" value="{{ i }}_{{ j }}" />
-             </form>
-             </td>
-           {% endif %}
-        {% endif %}
+            {% else %} <!-- else: the field was not selected -->
+                <!-- if the indices are all even or all odd, then make it a dark field and add a button to select it -->
+               {% if (j % 2 == 0 and i % 2 == 0) or (j % 2 == 1 and i % 2 == 1) %}
+                   <td class="td td_black">
+                      <form action="/select" method="post" >
+                         <input class ="button button_black" name="button" type ="submit" value="{{ i }}_{{ j }}" />
+                      </form>
+                   </td>
+                <!-- otherwise, make it a light field and add a button to select it -->
+               {% else %}
+                   <td class = "td td_light">
+                      <form action="/select" method="post" >
+                         <input class="button button_light" name="button" type ="submit" value="{{ i }}_{{ j }}" />
+                      </form>
+                   </td>
+               {% endif %}
+            {% endif %}
         {% endfor %}
     </tr>
     {% endfor %}
@@ -102,12 +118,12 @@
 
 
 
-{% if not is_valid  %}
+{% if not is_selection_valid  %}
     <p>There exists no solution for your selection of queens (checked by
         CP solver <a href="http://gecode.org">Gecode</a>).</p>
     <p><button onclick="window.location.href='/nqueens-try-again'">Try again!</button>
     </p>
-{% elif has_won %}
+{% elif all_queens_placed %}
     <p>Well done, you have solved the puzzle!<br>
     <!-- show cute christmas puppies "as reward" -->
         {% if winning_image_number == 1 %}
@@ -130,11 +146,11 @@
     <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
     </p>
 {% else %}
-    <p>Click on a field of the chess board to place your queen.</p>
- {% endif %}
+    <p>Click on the centre of a field of the chess board to place your queen.</p>
+{% endif %}
 
-     <br>
-     <p><button onclick="window.location.href='/riccardo-xmas'">Go back to start page</button>
+    <br>
+    <p><button onclick="window.location.href='/nqueens-game'">Go back to start page</button>
     </p>
     </div>
 </body>
