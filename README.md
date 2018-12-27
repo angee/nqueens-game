@@ -8,7 +8,7 @@ In each step, the player selects a field on the chessboard to place a queen. Aft
 a CP solver checks if there exists a solution for the current placement of queens.
 
 
-![alt text](http://andrearendl.com/nqueens-game.png "Playing the 5-games puzzle")
+![alt text](http://andrearendl.com/nqueens.png "Playing the 5-games puzzle")
 
 
 The application uses Python [Flask](http://flask.pocoo.org/) as web-server and [MiniZinc](http://minizinc.org) 
