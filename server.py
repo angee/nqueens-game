@@ -34,6 +34,22 @@ number_of_winning_images = 5
 winning_image_number = 1
 
 
+@app.route('/stefan')
+def display_start_page_stefan():
+    """
+    Displays the start page before starting the game
+    :return: the start page
+    """
+    return render_template('start.html')
+
+@app.route('/stefan', methods=['POST'])
+def play_stefan():
+    """
+    Displays the start page before starting the game
+    :return: the start page
+    """
+    return play()
+
 @app.route('/nqueens-game')
 def display_start_page():
     """

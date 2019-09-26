@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>N-Queens Game</title>
+    <title>Stefans Schach Spiel</title>
 </head>
 <style>
     body {
@@ -23,19 +23,21 @@
   <br>
 
   <div class="text">
-    <h1>N-queens game</h1>
+    <h1>Stefans Schachspiel</h1>
 
-        <p>This game is based on the <a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">8-Queens Problem</a> and
-         the challenge is to place N queens on an N x N chessboard so that no two queens attack each other.</p>
+        <p>Alles Gute zum Geburtstag! Dieses kleine Spiel basiert auf einem mathematischen Problem, dem
+            <a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">8-Damen Problem</a>. Die Challenge
+            ist, auf einem 8x8 Schachbrett genau 8 Damen so zu plazieren, dass sie sich nicht gegenseitig
+            angreifen koennen. In diesem Spiel kannst du dir die Schachbrettgroesse aussuchen.</p>
 
-        <p>Note that every time you place a queen on the chessboard, a solver checks if there is a solution for the
-         current placement, so there might be a minimal delay after each step. You can find the code for this game on
-         <a href="https://github.com/angee/nqueens-game">https://github.com/angee/nqueens-game</a>.</p>
+        <p>In jedem Schritt in dem Spiel plazierst du eine Dame auf dem Schachbrett, und ein mathematischer Löser
+            rechnet im Hintergrund, ob es noch eine gültige Lösung gibt. Es kann also sein, dass es minimale
+            Verzögerungen wegen der Berechnung gibt. Viel Spass beim Spielen!</p>
     <br>
     
     <form method="POST">
-      <b>Start playing:</b> choose your chessboard size (N): <input name="N" maxlength="2" size="2" type ="number" style="width: 50px;">
-      <br>(<i>hint: 5 is a good start</i>)
+      <b>Los gehts:</b> Schachbrettgroesse: <input name="N" maxlength="2" size="2" type ="number" style="width: 50px;">
+      <br>(<i>Tip: 5 ist ein guter Einstieg</i>)
        <p><input type="submit" value="Play!"></p>
     </form>
   </div>

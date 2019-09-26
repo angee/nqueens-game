@@ -15,7 +15,7 @@ It uses the following input parameters through Flask:
 -->
 <html>
 <head>
-    <title>{{ queens_positions|length }}-Queens Game</title>
+    <title>{{ queens_positions|length }}- Schachspiel</title>
 </head>
 <style>
     table, th, td {
@@ -75,7 +75,7 @@ It uses the following input parameters through Flask:
 
 <div class="text">
     
-<p><b>You are solving the {{ queens_positions|length }}-queens puzzle.</b></p>
+<p><b>Du loest gerade das {{ queens_positions|length }}-Schachspiel.</b></p>
 
 <table>
     {% for i in range(queens_positions|length) %}
@@ -117,12 +117,12 @@ It uses the following input parameters through Flask:
 
 
 {% if not is_selection_valid  %}
-    <p>There exists no solution for your selection of queens (checked by
+    <p>Leider gibt es keine Loesung mehr in der momentanen Konstellation (checked by
         CP solver <a href="http://gecode.org">Gecode</a>).</p>
-    <p><button onclick="window.location.href='/nqueens-try-again'">Try again!</button>
+    <p><button onclick="window.location.href='/nqueens-try-again'">Probiers nochmal!</button>
     </p>
 {% elif all_queens_placed %}
-    <p>Well done, you have solved the puzzle!<br>
+    <p>Super, du hast das Spiel gewonnen!<br>
     <!-- show cute christmas puppies "as reward" -->
         {% if winning_image_number == 1 %}
             <!-- dog dancing in snow -->
@@ -141,14 +141,14 @@ It uses the following input parameters through Flask:
             <img src="https://media.giphy.com/media/3rjZ6ABj8BUNa/giphy.gif">
         {% endif %}
     </p>
-    <p><button onclick="window.location.href='/nqueens-another-game'">Solve a larger problem!</button>
+    <p><button onclick="window.location.href='/nqueens-another-game'">Loese ein groesseres Problem!</button>
     </p>
 {% else %}
-    <p>Click on a field of the chessboard to place your queen.</p>
+    <p>Klicke auf ein Feld am Schachbrett um deine Dame zu plazieren.</p>
 {% endif %}
 
     <br>
-    <p><button onclick="window.location.href='/nqueens-game'">Go back to start page</button>
+    <p><button onclick="window.location.href='/nqueens-game'">Zurueck zum Start</button>
     </p>
     </div>
 </body>
